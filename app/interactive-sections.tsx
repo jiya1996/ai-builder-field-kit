@@ -1,66 +1,21 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { courseGates } from "./course-data";
 import { projectFamilies } from "./data";
 
-const gates = [
-  {
-    id:"g0",number:"0",time:"半天 · 全局新手村",title:"让第一个网页出现在互联网上",
-    deliverable:"公开 URL + 修改前后证据",boss:"制造错误、定位层级、修复或回滚、重新发布",skills:"项目 / 浏览器 / 终端 / Git / 部署",
-    lessons:["打开正确项目，让 Agent 先读再改","完成一个肉眼可见的小修改","区分本地、预览与生产","保存 Git Commit 与稳定基线","制造并恢复一个真实错误"],
-    assets:["《安装成功证据单》","《软件运行地图》","《第一次修改任务卡》","《错误与修复记录》"],
-    acceptance:["任何人能打开公开 URL","能展示修改前后差异","有一个可恢复 Commit","能说明错误发生在哪一层"],
-  },
-  {
-    id:"g1",number:"1",time:"3–7 天 · 快速胜利",title:"做一个自己每天会用的 AI 研究简报",
-    deliverable:"在线研究简报工具 + 5 组测试结果",boss:"超时、错误格式或空结果故障演练",skills:"表单 / API / 模型边界 / Structured Output",
-    lessons:["把主题变成研究问题与输出结构","建立加载、成功与失败状态","在服务端安全调用模型","用 Schema 固定报告结构","记录延迟、成本与失败样例"],
-    assets:["《AI 研究简报任务卡》","《模型输入输出记录》","《功能验收单》","《AI 输出验收单》","《成本与延迟记录》"],
-    acceptance:["工具可被反复使用","至少 5 组输入有记录","错误输出不会直接展示为正确结果","密钥没有进入浏览器"],
-  },
-  {
-    id:"g2",number:"2",time:"2–3 周 · 黄金项目 V1",title:"上线多用户研究到内容发布工作台",
-    deliverable:"Production 工作台 + 第一批真实用户",boss:"第二账号越权测试 + 故障发布回滚 + 用户反馈",skills:"Spec / CRUD / Auth / RLS / 文件 / 引用",
-    lessons:["完成问题证据、Spec 与 Non-goal","建立研究项目、来源、笔记和报告版本","完成注册登录与个人研究空间","上传资料并生成第一版带引用报告","加入自动检查、日志与生产部署","邀请真实用户完成一次研究任务"],
-    assets:["《一页 Product Spec》","《数据流与信任边界图》","《权限矩阵》","《全栈验收报告》","《回滚记录》","《首位用户反馈》"],
-    acceptance:["新用户能独立完成核心流程","账号 B 不能读取账号 A 的研究资料","每个引用能回到来源","一次故障后能恢复稳定版本"],
-  },
-  {
-    id:"g3",number:"3",time:"1 周 · Starter Kit v1",title:"用一半时间做出“报告转汇报稿”",
-    deliverable:"第二产品 + 时间与错误对比图",boss:"全新环境启动 Starter Kit，删除一个伪通用资产",skills:"抽象 / SOP / Skill / 复用测量",
-    lessons:["区分通用底座与项目特例","提炼登录、数据、AI 与错误处理骨架","建立 Spec、Task、QA 和部署模板","制作报告转汇报稿或内容卡第二产品","记录时间、错误与人工干预次数"],
-    assets:["《Starter Kit v1》","《项目启动 SOP》","《可复用/不可复用清单》","《两次开发对比图》","第一批个人 Skill"],
-    acceptance:["Starter Kit 在空目录启动成功","第二产品核心流程不同","明确删除至少一个错误抽象","复用收益有时间和错误证据"],
-  },
-  {
-    id:"g4",number:"4",time:"4–6 周 · AI-Native 升级季",title:"让产品能理解资料、执行动作并扩展",
-    deliverable:"黄金项目 V2–V6 + 六次能力实验",boss:"每次升级都必须通过失败测试与采用/不采用决策",skills:"RAG / Tool / MCP / 多模态 / Provider / Multi-agent",
-    lessons:["4A 私有资料 RAG、引用与无答案","4B 受控 Tool Loop、权限与 Trace","4C 最小 MCP Server/Client","4D 多模态或移动 Companion","4E 云端/本地模型同题比较","4F 单 Agent/多 Agent 对照"],
-    assets:["《Golden Dataset》","《Permission Table》","《完整 Run Trace》","《MCP 能力清单》","《Provider 对比表》","《单/多 Agent 决策卡》"],
-    acceptance:["RAG 无依据时拒绝编造","越权工具动作被 Runtime 拒绝","每个 Call 都能找到 Result","高级能力只在有证据时进入正式产品"],
-  },
-  {
-    id:"g5",number:"5",time:"2–4 周 · 产品远征",title:"完成七类 AI 产品任务，并选择一类深做",
-    deliverable:"7 张证据卡 + 1 个深度项目",boss:"面对新任务选择正确形态、架构和失败指标",skills:"Research / Data / Browser / Coding / Personal / Knowledge / Workflow",
-    lessons:["Deep Research：来源、冲突与反证","Data Agent：计算、Schema 与验证","Browser Agent：页面状态、动作与恢复","Coding Agent：Repo、Diff、Test 与权限","Personal Agent：记忆、隐私与主动性","Knowledge Agent：解析、检索、引用与更新","Workflow：确定步骤、幂等、重试与审批"],
-    assets:["7 份架构决策卡","7 份运行或回放记录","7 次关键失败记录","1 个个人方向深度项目"],
-    acceptance:["七类都完成最小真实实验","每类都有一次失败证据","能说明何时 Workflow 优于 Agent","深做方向与个人目标一致"],
-  },
-  {
-    id:"g6",number:"6",time:"1–2 周 · 公开 Beta",title:"把一个 AI 产品打磨到敢公开",
-    deliverable:"可信赖公开 Beta + 真实用户反馈",boss:"回归、攻击、故障、成本阈值、Kill Switch 与 Incident 六连测",skills:"Eval / Trace / Red Team / 成本 / Incident",
-    lessons:["建立 Golden Dataset 与失败分类","区分传统 Test 与 AI Eval","记录 Trace、延迟、Token 和成本","执行 Prompt Injection 与越权攻击","设置 Canary、Kill Switch 和回滚","完成一次 Incident 演练与复盘"],
-    assets:["《Eval Report》","《Red Team 记录》","《成本预算与阈值》","《Incident Runbook》","《公开 Beta 反馈报告》"],
-    acceptance:["AI 变更有回归评测","攻击和越权有明确阻断","成本越界能触发停止","一次事故可定位、恢复和复盘"],
-  },
-  {
-    id:"g7",number:"7",time:"2–3 周 · 独立毕业",title:"把真实问题做成公开案例",
-    deliverable:"独立产品 + 作品案例页 + Starter Kit v2",boss:"陌生人按 README 使用，目标用户完成核心流程",skills:"Discovery / 独立决策 / 作品集 / 资产化",
-    lessons:["完成访谈、替代方案与假设分级","定义 MVP、Non-goal 与成功指标","独立完成架构、实现、Eval 与安全","收集反馈并完成一次迭代","写 README、案例页与求职/收入叙事","升级 RAG、Tool、Eval 与安全能力包"],
-    assets:["《完整 Discovery 记录》","《独立决策日志》","《毕业验收报告》","《作品集案例页》","《Starter Kit v2》","《个人 Builder 资产库》"],
-    acceptance:["项目来自自己的真实问题","陌生人只看说明即可使用","能解释三个不做的决定","所有完成声明都有证据"],
-  },
-];
+const gates = courseGates.map((gate) => ({
+  id: gate.id,
+  number: gate.number,
+  time: `${gate.duration} · ${gate.kicker}`,
+  title: gate.title,
+  deliverable: gate.outcome,
+  boss: gate.boss,
+  skills: gate.skills,
+  lessons: gate.lessons.map((lesson) => `${lesson.code} ${lesson.title}`),
+  assets: gate.assets,
+  acceptance: gate.acceptance,
+}));
 
 export function JourneyTracker() {
   const [done, setDone] = useState<string[]>([]);

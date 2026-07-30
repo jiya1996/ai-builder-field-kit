@@ -1,12 +1,5 @@
 import type { Metadata } from "next";
-import { Noto_Sans_SC } from "next/font/google";
 import "./globals.css";
-
-const noto = Noto_Sans_SC({
-  variable: "--font-noto",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
-});
 
 const publicOrigin = "https://jiya1996.github.io/ai-builder-field-kit";
 
@@ -30,5 +23,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {
-  return <html lang="zh-CN"><body className={noto.variable}>{children}</body></html>;
+  return <html lang="zh-CN"><body>{children}</body></html>;
 }

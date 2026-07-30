@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { JourneyTracker, ResourceExplorer, TemplateWorkbench } from "./interactive-sections";
 import { projectFamilies } from "./data";
 
@@ -37,8 +38,8 @@ const productModules = [
     index: "B",
     title: "AI Builder 项目库",
     promise: "做得出",
-    description: "客户主要工作的地方。官方轨道、能力实验与七类远征都被拆成可执行任务和 Boss 战。",
-    items: ["1 个全局新手村", "1 条完整官方项目轨道", "3 个快速胜利小工具", "6 个 AI-Native 能力实验", "7 类产品远征 + 1 类深做"],
+    description: "客户主要工作的地方。五个成果关把第一个网页、AI 工具、真产品、第二产品和毕业作品串成单线。",
+    items: ["5 个顺序推进的成果关", "45 个可展开学习小节", "3 选 1 的 AI 自用工具", "1 个多用户黄金项目", "1 个独立毕业作品"],
   },
   {
     index: "C",
@@ -50,26 +51,23 @@ const productModules = [
 ];
 
 const officialTrack = [
-  ["1", "AI 研究简报", "一个问题 → 研究结构、待核验事实与下一步", "在线工具 + 5 组测试"],
-  ["2", "多用户研究工作台", "来源、笔记、文件、报告版本与引用", "Production 产品 + 用户反馈"],
-  ["3", "报告转汇报稿", "用 Starter Kit 制作核心流程不同的第二产品", "第二链接 + 时间对比"],
-  ["4", "六次 AI-Native 升级", "RAG、Tool、MCP、多模态、Provider、Multi-agent", "六组实验与决策证据"],
-  ["5", "七类产品远征", "七类都做最小实验，Deep Research 做深", "7 张证据卡 + 深度项目"],
-  ["6", "可信赖公开 Beta", "Eval、攻击、成本、故障、回滚与 Incident", "Beta 链接 + 治理报告"],
-  ["7", "独立行业变体", "把轨道改造成自己的真实工作或业务场景", "毕业作品 + 案例页"],
+  ["0", "第一个网页上互联网", "描述、生成、预览、部署，再亲手制造并修复错误", "公开链接 + 修复证据"],
+  ["1", "每天会用的 AI 小工具", "任务卡、Agent 协作、模型调用、结构化输出与验收", "AI 工具 + 两张验收单"],
+  ["2", "别人能注册的真产品", "需求、架构、数据库、登录、RLS、文件、安全与运营", "Production + 真实用户"],
+  ["3", "一半时间做出第二个", "把代码、指挥方法和判断标准沉淀成 Starter Kit", "第二产品 + 时间对比"],
+  ["4", "自己的毕业作品", "完整 Discovery、独立交付、案例页与面试叙事", "独立作品 + 证据链"],
 ];
 
 const modes = [
-  ["跟做模式", "没有明确选题时，完整跟随官方“AI 研究到内容发布工作台”走完八关。"],
-  ["改造模式", "保留官方能力合同和架构，替换用户、行业、资料与输出形式。"],
-  ["自有项目模式", "做自己的产品；教学 Agent 负责范围切片、任务转换和统一 Boss 验收。"],
+  ["跟做模式", "没有明确选题时，跟随“灵感罐头”黄金项目走完五关，不需要自己设计学习路线。"],
+  ["同构换题模式", "关卡 1 从三个 AI 小工具中选一，关卡 2 可换成打卡圈或反馈墙，但能力合同不变。"],
+  ["独立毕业模式", "关卡 4 做自己的真实问题；教学 Agent 只提供范围切片、急救和统一 Boss 验收。"],
 ];
 
 const systems = [
-  ["急救室", "页面打不开、部署失败、模型无返回、权限异常——按症状保存证据、缩小变量、修复或回滚。", "✚"],
-  ["军火库", "Spec、Task、QA、部署、安全、Eval、Incident、Prompt、Schema、Starter Kit 和 Skill。", "⌁"],
-  ["词典室", "每个词条都回答：是什么、不是什么、在当前项目哪里出现、用错会发生什么。", "Aa"],
-  ["证据库", "自动积累 URL、截图、Diff、Commit、Log、Trace、Eval、失败样例、反馈与决策卡。", "✓"],
+  ["急救室", "排错五步、20 张常见报错急救卡、卡死三选一和标准求助模板。", "✚"],
+  ["军火库", "任务卡、项目四件套、7 张验收清单、10 条提示词与作品叙事模板。", "⌁"],
+  ["词典室", "60+ 个零基础术语与 10 张认知卡，每个概念都有项目内验证点。", "Aa"],
 ];
 
 export default function Home() {
@@ -88,10 +86,10 @@ export default function Home() {
         <nav aria-label="主导航">
           <a href="#delivery">客户拿到什么</a>
           <a href="#track">官方项目轨道</a>
-          <a href="#journey">八关课程</a>
+          <Link href="/learn">具体课程内容</Link>
           <a href="#templates">直接用模板</a>
         </nav>
-        <a className="header-cta" href="#delivery">打开交付包 ↗</a>
+        <Link className="header-cta" href="/learn">进入课程 ↗</Link>
       </header>
 
       <section className="hero" id="top">
@@ -108,13 +106,13 @@ export default function Home() {
         </p>
         <div className="hero-actions">
           <a className="button primary" href="#delivery">查看客户完整交付</a>
-          <a className="button secondary" href="#templates">直接试用模板</a>
+          <Link className="button secondary" href="/learn">查看具体学什么</Link>
         </div>
         <div className="proof-strip">
           <span><strong>3</strong> 个产品模块</span>
-          <span><strong>8</strong> 个成果关卡</span>
-          <span><strong>1</strong> 条完整官方轨道</span>
-          <span><strong>7</strong> 类产品远征</span>
+          <span><strong>5</strong> 个成果关卡</span>
+          <span><strong>45</strong> 个学习小节</span>
+          <span><strong>3</strong> 个常驻房间</span>
         </div>
       </section>
 
@@ -174,17 +172,17 @@ export default function Home() {
       <section className="section track-section" id="track">
         <div className="track-intro">
           <div>
-            <span className="section-index">03 / 第一条完整官方轨道</span>
-            <h2>AI 研究到内容发布工作台</h2>
-            <p>输入一个真实问题，得到有来源、有反证、可继续编辑的研究成果，再把它转成汇报或发布内容。</p>
+            <span className="section-index">03 / 五关完整主线</span>
+            <h2>从第一个网页，到自己的毕业作品</h2>
+            <p>每一关只增加当前成果真正需要的知识；学员沿一条路线连续做出 5 个可展示、可验收的结果。</p>
           </div>
           <div className="track-promise">
-            <span>为什么先做它</span>
-            <p>覆盖产品经理、创业者、咨询、市场、内容和研究人群；又能自然承载文件、引用、RAG、Browser Tool、MCP、Eval 与 Agent。</p>
+            <span>一期黄金项目</span>
+            <p>“灵感罐头”用最小体积覆盖登录、数据库、文件、RLS、AI、安全、部署和真实用户，是零基础第一次上线真产品的完整训练场。</p>
           </div>
         </div>
         <div className="track-flow">
-          <span>真实问题</span><i>→</i><span>可信资料</span><i>→</i><span>带引用报告</span><i>→</i><span>PPT / 内容卡</span><i>→</i><span>人工确认发布</span>
+          <span>公开网页</span><i>→</i><span>AI 小工具</span><i>→</i><span>多用户真产品</span><i>→</i><span>第二产品</span><i>→</i><span>毕业作品</span>
         </div>
         <div className="track-version-list">
           {officialTrack.map(([number, title, description, result]) => (
@@ -197,14 +195,14 @@ export default function Home() {
         </div>
         <div className="blueprint-grid">
           <article>
-            <span>蓝图轨道 A · 强视觉传播</span>
-            <h3>AI 房间改造</h3>
-            <p>上传房间照片，生成改造方案与前后对比。用于快速胜利和多模态实验，不强行贯穿八关。</p>
+            <span>主线不是一套视频目录</span>
+            <h3>每节都有真实动作</h3>
+            <p>客户会看到“学什么、动手做、完成证据”，并能在浏览器里按关卡展开具体课程内容。</p>
           </article>
           <article>
-            <span>蓝图轨道 B · 多媒体能力</span>
-            <h3>AI 视频翻译与配音</h3>
-            <p>从原视频到字幕、翻译、配音与成片。用于展示多模态、长任务与版权边界。</p>
+            <span>一期与二期边界清楚</span>
+            <h3>先会做，再看穿 Agent</h3>
+            <p>五关主线已是可交付正文；白盒 Agent、Tool Loop、权限、Trace 和评测进入二期进阶包。</p>
           </article>
         </div>
       </section>
@@ -212,12 +210,19 @@ export default function Home() {
       <section className="section journey-section" id="journey">
         <div className="section-heading split">
           <div>
-            <span className="section-index">04 / 八个成果关</span>
+            <span className="section-index">04 / 五个成果关</span>
             <h2>每一关都展开到课节、成品和验收标准。</h2>
           </div>
-          <p>点击“展开本关完整交付内容”，看到客户真正学习什么、带走什么、怎样证明通过。</p>
+          <p>这里先看总览；进入课程页后，可以继续展开全部 45 个小节的学习目标、动手任务与完成证据。</p>
         </div>
         <JourneyTracker />
+        <div className="journey-course-cta">
+          <div>
+            <span>课程正文已经上线</span>
+            <h3>继续查看每一节具体学什么</h3>
+          </div>
+          <Link className="button primary" href="/learn">进入课程内容 →</Link>
+        </div>
       </section>
 
       <section className="section template-section" id="templates">
@@ -266,10 +271,10 @@ export default function Home() {
 
       <section className="section rooms-section">
         <div className="section-heading">
-          <span className="section-index">07 / 四个常驻系统</span>
+          <span className="section-index">07 / 三个常驻房间</span>
           <h2>课程会结束，救援、证据和个人资产不会。</h2>
         </div>
-        <div className="room-grid four">
+        <div className="room-grid">
           {systems.map(([title, copy, icon]) => (
             <article className="room-card" key={title}>
               <span className="room-icon">{icon}</span>
@@ -299,7 +304,7 @@ export default function Home() {
       <section className="final-cta">
         <p>最终交付不是“看完多少链接”</p>
         <h2>而是产品、证据和个人工作系统都留在客户手里。</h2>
-        <a className="button primary" href="#delivery">重新查看完整交付 →</a>
+        <Link className="button primary" href="/learn">查看全部课程内容 →</Link>
       </section>
 
       <footer>
@@ -307,7 +312,7 @@ export default function Home() {
           <span className="brand-mark">AI</span>
           <span>Builder Delivery System</span>
         </div>
-        <p>产品框架版本：2026-07-30 · 供团队评审</p>
+        <p>关卡制交付版 · 五关主线 + 三个常驻房间</p>
         <a href="#top">回到顶部 ↑</a>
       </footer>
     </main>
