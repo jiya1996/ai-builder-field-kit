@@ -8,6 +8,7 @@ import {
   getCourseLesson,
   getLessonMarkdown,
 } from "../../../course-content";
+import {CopyableCodeBlock} from "./copyable-code-block";
 
 type LessonPageProps = {
   params: Promise<{gate: string; lesson: string}>;
@@ -112,7 +113,16 @@ export default async function LessonPage({params}: LessonPageProps) {
         </aside>
 
         <article className="lesson-markdown" id="lesson-content">
-          <ReactMarkdown remarkPlugins={[remarkGfm]}>{markdown}</ReactMarkdown>
+          <ReactMarkdown
+            remarkPlugins={[remarkGfm]}
+            components={{
+              pre: ({children}) => (
+                <CopyableCodeBlock>{children}</CopyableCodeBlock>
+              ),
+            }}
+          >
+            {markdown}
+          </ReactMarkdown>
           <div className="lesson-check-card" id="lesson-check">
             <span>本节完成标准</span>
             <h2>不是“读完了”，而是证据已经产生。</h2>
