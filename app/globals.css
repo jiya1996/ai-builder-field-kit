@@ -20,7 +20,7 @@ nav{display:flex;gap:30px;font-size:14px;font-weight:700}nav a:hover{text-decora
 .hero-orbit{position:absolute;border:2px dashed rgba(20,33,61,.25);border-radius:50%}.orbit-one{width:520px;height:520px;left:calc(50% - 260px);top:70px}.orbit-two{width:740px;height:300px;left:calc(50% - 370px);top:230px;transform:rotate(-8deg)}
 .eyebrow{position:relative;display:inline-flex;background:var(--yellow);border:2px solid var(--line);box-shadow:4px 4px 0 var(--line);padding:9px 16px;border-radius:999px;font-weight:800;font-size:13px;transform:rotate(-1deg)}
 h1{position:relative;max-width:980px;margin:36px auto 22px;font-size:clamp(48px,7.4vw,96px);line-height:.99;letter-spacing:-.075em;font-weight:900}
-h1 span{display:block;color:var(--coral);text-shadow:3px 3px 0 var(--line);-webkit-text-stroke:1px var(--line)}
+h1 span{display:block;color:var(--coral);text-shadow:none;-webkit-text-stroke:0;paint-order:normal}
 .hero-copy{position:relative;max-width:680px;margin:0 auto;font-size:19px;line-height:1.8;color:#536078}
 .hero-actions{position:relative;display:flex;gap:14px;justify-content:center;margin:34px 0 48px}
 .button{display:inline-flex;align-items:center;justify-content:center;padding:15px 24px;border:2px solid var(--line);border-radius:12px;font-weight:900;box-shadow:4px 4px 0 var(--line);transition:.15s}.button:hover{transform:translate(2px,2px);box-shadow:2px 2px 0 var(--line)}
