@@ -19,6 +19,7 @@ export default function LearnPage() {
           <span>Builder Delivery System</span>
         </Link>
         <nav aria-label="课程导航">
+          <a href="#knowledge">核心知识</a>
           <a href="#curriculum">五关主线</a>
           <a href="#support">常驻房间</a>
           <a href="#advanced">进阶包</a>
@@ -47,6 +48,28 @@ export default function LearnPage() {
             </div>
           ))}
         </div>
+      </section>
+
+      <section className="knowledge-foundation-section" id="knowledge">
+        <div className="section-heading split">
+          <div>
+            <span className="section-index">KNOWLEDGE / 核心知识课</span>
+            <h2>不只知道怎么做，还要看懂系统为什么这样工作。</h2>
+          </div>
+          <p>核心概念按“定义、动机、反事实、代价、关系、系统位置、代码证据”展开，并配有系统图和验证实验。</p>
+        </div>
+        <article className="knowledge-feature-card">
+          <div className="knowledge-feature-index">K1</div>
+          <div>
+            <span>白盒基础 · 完整正文已上线</span>
+            <h3>Agent 与 Harness：从模型回答到系统行动</h3>
+            <p>分清 Model、AI 功能、Workflow、Agent、Harness 与 Runtime；看懂 Tool Loop、权限、状态、Trace 和恢复。</p>
+            <div>
+              <span>关系地图</span><span>运行时序</span><span>代码证据</span><span>三组对照实验</span>
+            </div>
+          </div>
+          <Link href="/learn/concepts/agent-harness">开始学习完整知识课 →</Link>
+        </article>
       </section>
 
       <section className="curriculum-section" id="curriculum">
@@ -81,9 +104,10 @@ export default function LearnPage() {
 
       <section className="advanced-section" id="advanced">
         <div className="advanced-intro">
-          <span>二期进阶包 · 当前为大纲级设计</span>
+          <span>二期进阶包 · 核心首章已上线</span>
           <h2>看穿你的 Agent</h2>
           <p>一期教你用 Agent 把产品做完；进阶包让你亲手搭一个迷你 Agent，用 Trace、权限、状态机和评测看穿它。</p>
+          <Link className="button primary" href="/learn/concepts/agent-harness">先学 Agent 与 Harness →</Link>
         </div>
         <div className="advanced-list">
           {advancedModules.map(([code, title, copy]) => (

@@ -8,7 +8,7 @@ import {
   getCourseLesson,
   getLessonMarkdown,
 } from "../../../course-content";
-import {CopyableCodeBlock} from "./copyable-code-block";
+import {CopyableCodeBlock} from "../../../copyable-code-block";
 
 type LessonPageProps = {
   params: Promise<{gate: string; lesson: string}>;
