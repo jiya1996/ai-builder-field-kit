@@ -22,6 +22,7 @@ export default function KnowledgePage() {
       <SiteNav active="knowledge" />
 
       <section className="inner-hero theory-hero">
+        <Link className="page-return-home" href="/">← 返回首页</Link>
         <span className="section-index">PAGE 02 / 理论知识</span>
         <h1>不是先读完一本教材。<br/><span>是为每一次行动准备正确的知识。</span></h1>
         <p>固定知识建立稳定地基，动态知识跟随 AI 行业更新。每一章都标出它服务哪一关、解决什么误解，以及应该在项目里看到什么证据。</p>

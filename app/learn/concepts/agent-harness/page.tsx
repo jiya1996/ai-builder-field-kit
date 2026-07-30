@@ -1,6 +1,7 @@
 import type {Metadata} from "next";
 import Link from "next/link";
 import {CopyableCodeBlock} from "../../../copyable-code-block";
+import {SiteNav} from "../../../site-nav";
 
 export const metadata: Metadata = {
   title: "Agent 与 Harness：从模型回答到系统行动｜AI Builder 核心知识",
@@ -59,23 +60,14 @@ const identityRows = [
 export default function AgentHarnessKnowledgePage() {
   return (
     <main className="knowledge-page">
-      <header className="site-header learn-header">
-        <Link className="brand" href="/" aria-label="返回课程首页">
-          <span className="brand-mark">AI</span>
-          <span>Builder Delivery System</span>
-        </Link>
-        <nav aria-label="知识课导航">
-          <a href="#map">概念地图</a>
-          <a href="#runtime">运行时序</a>
-          <a href="#mechanisms">六个机制</a>
-          <a href="#experiment">验证实验</a>
-        </nav>
-        <Link className="header-cta" href="/learn">返回学习中心 ↗</Link>
-      </header>
+      <SiteNav active="knowledge" />
 
       <section className="knowledge-hero">
+        <Link className="page-return-home" href="/">← 返回首页</Link>
         <div className="knowledge-breadcrumb">
-          <Link href="/learn">学习中心</Link>
+          <Link href="/">首页</Link>
+          <span>›</span>
+          <Link href="/knowledge">理论知识</Link>
           <span>›</span>
           <b>核心知识 K1</b>
         </div>

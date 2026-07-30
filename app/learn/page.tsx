@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { advancedModules, courseGates, supportRooms } from "../course-data";
+import {SiteNav} from "../site-nav";
 import { CurriculumBrowser } from "./curriculum-browser";
 
 export const metadata: Metadata = {
@@ -13,22 +14,11 @@ export default function LearnPage() {
 
   return (
     <main className="learn-page">
-      <header className="site-header learn-header">
-        <Link className="brand" href="/" aria-label="返回课程首页">
-          <span className="brand-mark">AI</span>
-          <span>Builder Delivery System</span>
-        </Link>
-        <nav aria-label="课程导航">
-          <a href="#knowledge">核心知识</a>
-          <a href="#curriculum">五关主线</a>
-          <a href="#support">常驻房间</a>
-          <a href="#advanced">进阶包</a>
-        </nav>
-        <Link className="header-cta" href="/">返回总览 ↗</Link>
-      </header>
+      <SiteNav active="action" />
 
       <section className="learn-hero">
         <div className="learn-hero-copy">
+          <Link className="page-return-home" href="/">← 返回首页</Link>
           <span className="section-index">一期课程 · 可直接交付正文</span>
           <h1>你不是来“看课”的。<br/><span>你会逐关做出 5 个成果。</span></h1>
           <p>这里展示客户真正学习的内容：每一节学什么、动手做什么、拿什么证明完成。知识只在项目需要的那一刻出现。</p>

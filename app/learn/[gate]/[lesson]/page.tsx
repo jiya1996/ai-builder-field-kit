@@ -9,6 +9,7 @@ import {
   getLessonMarkdown,
 } from "../../../course-content";
 import {CopyableCodeBlock} from "../../../copyable-code-block";
+import {SiteNav} from "../../../site-nav";
 
 type LessonPageProps = {
   params: Promise<{gate: string; lesson: string}>;
@@ -51,23 +52,14 @@ export default async function LessonPage({params}: LessonPageProps) {
 
   return (
     <main className="lesson-page">
-      <header className="site-header learn-header">
-        <Link className="brand" href="/" aria-label="返回课程首页">
-          <span className="brand-mark">AI</span>
-          <span>Builder Delivery System</span>
-        </Link>
-        <nav aria-label="课节导航">
-          <Link href="/learn">全部课程</Link>
-          <a href="#lesson-content">本节正文</a>
-          <a href="#lesson-check">本节验收</a>
-        </nav>
-        <Link className="header-cta" href="/learn">课程目录 ↗</Link>
-      </header>
+      <SiteNav active="action" />
 
       <section className="lesson-hero">
+        <Link className="page-return-home" href="/">← 返回首页</Link>
         <div className="lesson-breadcrumb">
-          <Link href="/">总览</Link><span>›</span>
-          <Link href="/learn">课程内容</Link><span>›</span>
+          <Link href="/">首页</Link><span>›</span>
+          <Link href="/action">课程实战</Link><span>›</span>
+          <Link href="/learn">完整目录</Link><span>›</span>
           <b>关卡 {courseLesson.gate.number}</b>
         </div>
         <div className="lesson-labels">
