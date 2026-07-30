@@ -2,10 +2,10 @@ import Link from "next/link";
 
 export function SiteNav({active}: {active: "home" | "knowledge" | "action" | "coach"}) {
   const items = [
-    {id: "home", href: "/", label: "产品介绍"},
+    {id: "home", href: "/", label: "首页"},
     {id: "knowledge", href: "/knowledge", label: "理论知识"},
-    {id: "action", href: "/action", label: "行动计划"},
-    {id: "coach", href: "/coach", label: "个性化辅导"},
+    {id: "action", href: "/action", label: "课程实战"},
+    {id: "coach", href: "/coach", label: "辅导 Agent"},
   ] as const;
 
   return (
@@ -21,7 +21,7 @@ export function SiteNav({active}: {active: "home" | "knowledge" | "action" | "co
           </Link>
         ))}
       </nav>
-      <Link className="header-cta" href="/action">开始第一关 ↗</Link>
+      <Link className="header-cta" href="/learn/g0/0.0">从关卡 0 开始 ↗</Link>
     </header>
   );
 }
