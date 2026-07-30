@@ -77,10 +77,22 @@ export default async function LessonPage({params}: LessonPageProps) {
           <small>{courseLesson.lesson.code}</small>
           {courseLesson.lesson.title}
         </h1>
-        <p>{courseLesson.lesson.learn}</p>
+        <p className="lesson-mission">
+          <b>本节任务：</b>{courseLesson.lesson.practice}
+        </p>
         <div className="lesson-hero-contract">
-          <div><span>这节要动手做</span><strong>{courseLesson.lesson.practice}</strong></div>
-          <div><span>完成后留下</span><strong>{courseLesson.lesson.evidence}</strong></div>
+          <div>
+            <span>输入什么</span>
+            <strong>{courseLesson.lesson.input}</strong>
+          </div>
+          <div>
+            <span>输出什么</span>
+            <strong>{courseLesson.lesson.evidence}</strong>
+          </div>
+          <div>
+            <span>学会什么</span>
+            <strong>{courseLesson.lesson.learn}</strong>
+          </div>
         </div>
       </section>
 
