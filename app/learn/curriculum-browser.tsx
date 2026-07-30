@@ -16,12 +16,15 @@ export function CurriculumBrowser() {
   );
 
   useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (saved) setDone(JSON.parse(saved));
-    } catch {
-      setDone([]);
-    }
+    const frame = window.requestAnimationFrame(() => {
+      try {
+        const saved = window.localStorage.getItem(STORAGE_KEY);
+        if (saved) setDone(JSON.parse(saved));
+      } catch {
+        setDone([]);
+      }
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   const toggleLesson = (code: string) => {

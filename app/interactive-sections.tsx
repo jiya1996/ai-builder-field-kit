@@ -20,8 +20,11 @@ const gates = courseGates.map((gate) => ({
 export function JourneyTracker() {
   const [done, setDone] = useState<string[]>([]);
   useEffect(() => {
-    const saved = window.localStorage.getItem("ai-builder-gates");
-    if (saved) setDone(JSON.parse(saved));
+    const frame = window.requestAnimationFrame(() => {
+      const saved = window.localStorage.getItem("ai-builder-gates");
+      if (saved) setDone(JSON.parse(saved));
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, []);
   const toggle = (id: string) => {
     const next = done.includes(id) ? done.filter((item) => item !== id) : [...done, id];
