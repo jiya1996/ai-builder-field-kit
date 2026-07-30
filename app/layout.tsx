@@ -15,18 +15,18 @@ export async function generateMetadata(): Promise<Metadata> {
   const protocol = requestHeaders.get("x-forwarded-proto") ?? (host.startsWith("localhost") ? "http" : "https");
   const origin = `${protocol}://${host}`;
   return {
-    title: "AI Builder Field Kit｜把第一个 AI 产品真的做完",
-    description: "给零基础 AI Builder 的关卡制产品交付资料包：走完、敢上线、能重复。",
+    title: "AI Builder Delivery System｜客户真正拿到的课程产品",
+    description: "知识库 × 项目库 × 教学 Agent：用八个成果关把第一个 AI 产品做完、上线并沉淀成个人工作系统。",
     openGraph: {
-      title: "AI Builder Field Kit",
-      description: "不是让 AI 写代码，是把第一款真产品做完。",
+      title: "AI Builder Delivery System",
+      description: "知识库负责查得懂，项目库负责做得出，教学 Agent 负责走得完。",
       type: "website",
       images: [{url: `${origin}/og.png`, width: 1200, height: 630, alt: "AI Builder Field Kit"}],
     },
     twitter: {
       card: "summary_large_image",
-      title: "AI Builder Field Kit",
-      description: "把第一个 AI 产品真的做完。",
+      title: "AI Builder Delivery System",
+      description: "客户拿到的不只是链接，而是一套真实产品交付系统。",
       images: [`${origin}/og.png`],
     },
   };
