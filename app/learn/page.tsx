@@ -53,9 +53,9 @@ export default function LearnPage() {
         <div className="section-heading split">
           <div>
             <span className="section-index">COURSE / 五关主线</span>
-            <h2>点击关卡，再展开每一节。</h2>
+            <h2>点击关卡，再进入每节完整正文。</h2>
           </div>
-          <p>这不是营销大纲。每节都明确“学什么—动手做—完成证据”，最后用 Boss 战判断能否进入下一关。</p>
+          <p>目录卡先说明目标；点击“阅读完整正文”，即可看到白话讲解、逐步操作、提示词、验收清单和常见坑。</p>
         </div>
         <CurriculumBrowser />
       </section>

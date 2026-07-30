@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { courseGates } from "../course-data";
 
 const STORAGE_KEY = "ai-builder-course-lessons-v1";
@@ -94,15 +95,17 @@ export function CurriculumBrowser() {
           {activeGate.lessons.map((lesson) => {
             const completed = done.includes(lesson.code);
             return (
-              <details className={`lesson-card ${completed ? "completed" : ""}`} key={lesson.code}>
-                <summary>
+              <article className={`lesson-card ${completed ? "completed" : ""}`} key={lesson.code}>
+                <div className="lesson-card-head">
                   <span className="lesson-code">{completed ? "✓" : lesson.code}</span>
                   <div>
                     <small>{lesson.time}</small>
                     <h4>{lesson.title}</h4>
                   </div>
-                  <span className="lesson-open">查看内容 ↓</span>
-                </summary>
+                  <Link className="lesson-read-link" href={`/learn/${activeGate.id}/${lesson.code}`}>
+                    阅读完整正文 →
+                  </Link>
+                </div>
                 <div className="lesson-body">
                   <div>
                     <span>01 · 学什么</span>
@@ -117,14 +120,19 @@ export function CurriculumBrowser() {
                     <p>{lesson.evidence}</p>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  className="lesson-complete-button"
-                  onClick={() => toggleLesson(lesson.code)}
-                >
-                  {completed ? "已学完 · 点击取消" : "标记这节已学完"}
-                </button>
-              </details>
+                <div className="lesson-card-actions">
+                  <Link href={`/learn/${activeGate.id}/${lesson.code}`}>
+                    打开讲解、步骤、提示词与验收清单
+                  </Link>
+                  <button
+                    type="button"
+                    className="lesson-complete-button"
+                    onClick={() => toggleLesson(lesson.code)}
+                  >
+                    {completed ? "已学完 · 点击取消" : "标记这节已学完"}
+                  </button>
+                </div>
+              </article>
             );
           })}
         </div>
