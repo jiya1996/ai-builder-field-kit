@@ -3,10 +3,9 @@ import Link from "next/link";
 export function SiteNav({active}: {active: "home" | "knowledge" | "action" | "coach"}) {
   const items = [
     {id: "home", href: "/", label: "首页"},
-    {id: "knowledge", href: "/knowledge", label: "理论知识"},
-    {id: "action", href: "/action", label: "课程实战"},
-    {id: "coach", href: "/coach", label: "辅导 Agent"},
+    {id: "studio", href: "/learn", label: "学习工作台"},
   ] as const;
+  const current = active === "home" ? "home" : "studio";
 
   return (
     <header className="site-header product-header">
@@ -16,12 +15,12 @@ export function SiteNav({active}: {active: "home" | "knowledge" | "action" | "co
       </Link>
       <nav aria-label="产品主导航">
         {items.map((item) => (
-          <Link className={active === item.id ? "is-active" : ""} href={item.href} key={item.id}>
+          <Link className={current === item.id ? "is-active" : ""} href={item.href} key={item.id}>
             {item.label}
           </Link>
         ))}
       </nav>
-      <Link className="header-cta" href="/learn/g0/0.0">从关卡 0 开始 ↗</Link>
+      <Link className="header-cta" href="/learn?stage=s00&view=theory">打开 S00–S10 ↗</Link>
     </header>
   );
 }
