@@ -73,7 +73,7 @@ export default function KnowledgePage() {
             ["⑤ 部署平台", "构建并放到公开服务器"],
             ["⑥ URL", "别人访问服务器的地址"],
           ].map(([title, copy]) => <div key={title}><b>{title}</b><small>{copy}</small></div>)}
-          <Link href="/action#g0">把这张地图用于第一关 →</Link>
+          <Link href="/knowledge/web-foundations">阅读完整第一章 →</Link>
         </div>
       </section>
 
@@ -94,6 +94,7 @@ export default function KnowledgePage() {
                 <summary>查看本章一手来源</summary>
                 <ul>{chapter.sources.map((source) => <li key={source.href}><a href={source.href} target="_blank" rel="noreferrer">{source.label} ↗</a></li>)}</ul>
               </details>
+              {chapter.id === "web" && <Link className="chapter-deep-link" href="/knowledge/web-foundations">阅读完整第一章：Git、URL、语言与前后端 →</Link>}
               {chapter.id === "agent" && <Link className="chapter-deep-link" href="/learn/concepts/agent-harness">阅读已完成的 Agent 与 Harness 深度课 →</Link>}
             </article>
           ))}

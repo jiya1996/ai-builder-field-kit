@@ -137,7 +137,7 @@ export default function Home() {
         </div>
         <div className="home-theory-grid">
           {knowledgeChapters.map((chapter) => (
-            <Link href={`/knowledge#${chapter.id}`} key={chapter.id}>
+            <Link href={chapter.id === "web" ? "/knowledge/web-foundations" : `/knowledge#${chapter.id}`} key={chapter.id}>
               <div><b>{chapter.code}</b><span>{chapter.gates.join(" · ")}</span></div>
               <h3>{chapter.title}</h3>
               <p>{chapter.question}</p>
