@@ -100,10 +100,19 @@ export function LearningWorkbench({
 
     const frame = window.requestAnimationFrame(() => {
       applyLocation();
-      setCompleted(readStoredArray(storageKeys.completed));
+      const storedEvidence = readStoredChecks(storageKeys.evidenceChecks);
+      const storedBoss = readStoredArray(storageKeys.bossChecks);
+      const validCompleted = readStoredArray(storageKeys.completed).filter((stageId) => {
+        const storedStage = learningStages.find((item) => item.id === stageId);
+        return storedStage
+          ? (storedEvidence[stageId]?.length ?? 0) === storedStage.evidence.length && storedBoss.includes(stageId)
+          : false;
+      });
+      setCompleted(validCompleted);
       setPracticeChecks(readStoredChecks(storageKeys.practiceChecks));
-      setEvidenceChecks(readStoredChecks(storageKeys.evidenceChecks));
-      setBossChecks(readStoredArray(storageKeys.bossChecks));
+      setEvidenceChecks(storedEvidence);
+      setBossChecks(storedBoss);
+      window.localStorage.setItem(storageKeys.completed, JSON.stringify(validCompleted));
     });
     window.addEventListener("popstate", applyLocation);
     return () => {
