@@ -20,7 +20,7 @@ export function SiteNav({active}: {active: "home" | "knowledge" | "action" | "co
           </Link>
         ))}
       </nav>
-      <Link className="header-cta" href="/learn?stage=s00&view=theory">打开 S00–S10 ↗</Link>
+      <Link className="header-cta" href="/learn/s00?view=theory">打开 S00–S10 ↗</Link>
     </header>
   );
 }

@@ -1,5 +1,6 @@
 import type {Metadata} from "next";
 import {LearningWorkbench} from "../learning-workbench";
+import {getAllDetailedLessons} from "../stage-lesson-map";
 
 export const metadata: Metadata = {
   title: "实战视图｜AI Builder 学习工作台",
@@ -7,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function ActionPage() {
-  return <LearningWorkbench initialView="practice" />;
+  return <LearningWorkbench initialView="practice" detailedLessons={getAllDetailedLessons()} />;
 }

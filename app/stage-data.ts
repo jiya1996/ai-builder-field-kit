@@ -241,7 +241,7 @@ export const learningStages: LearningStage[] = [
     evidence: ["请求—响应图", "Schema 与校验失败样例", "正常/边界/攻击测试", "成本与延迟记录", "带来源的结果", "AI 失败不破坏核心数据的证明"],
     boss: "模型返回缺字段、错误事实或提示词注入内容时，产品仍保持可恢复。",
     sources: [
-      {label: "OpenAI API 指南", href: "https://platform.openai.com/docs/guides"},
+      {label: "OpenAI API 指南", href: "https://developers.openai.com/api/docs/guides"},
       {label: "OpenAI Cookbook", href: "https://cookbook.openai.com/"},
       {label: "Anthropic：Context Engineering", href: "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"},
     ],

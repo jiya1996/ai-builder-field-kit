@@ -2,8 +2,12 @@
 
 import Link from "next/link";
 import {useEffect, useMemo, useState} from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import {copyText} from "./copy-text";
+import {CopyableCodeBlock} from "./copyable-code-block";
 import {learningLayers, learningStages} from "./stage-data";
+import type {DetailedLesson} from "./stage-lesson-map";
 
 type WorkbenchView = "theory" | "practice" | "evidence";
 
@@ -40,9 +44,13 @@ function readStoredChecks() {
 export function LearningWorkbench({
   initialView = "theory",
   initialStage = "s00",
+  detailedLessons = [],
+  initialLessonCode,
 }: {
   initialView?: WorkbenchView;
   initialStage?: string;
+  detailedLessons?: DetailedLesson[];
+  initialLessonCode?: string;
 }) {
   const [stageId, setStageId] = useState(initialStage);
   const [view, setView] = useState<WorkbenchView>(initialView);
@@ -60,6 +68,7 @@ export function LearningWorkbench({
   );
 
   const stageIndex = learningStages.findIndex((item) => item.id === stage.id);
+  const currentDetailedLessons = detailedLessons.filter((lesson) => lesson.stageId === stage.id);
   const checkedSteps = practiceChecks[stage.id] ?? [];
   const progress = Math.round((completed.length / learningStages.length) * 100);
 
@@ -69,8 +78,11 @@ export function LearningWorkbench({
       const requestedStage = params.get("stage");
       const requestedView = params.get("view") as WorkbenchView | null;
       const storedStage = window.localStorage.getItem(storageKeys.lastStage);
+      const stageFromPath = window.location.pathname.match(/\/learn\/(s\d{2})\/?$/i)?.[1]?.toLowerCase();
 
-      if (requestedStage && learningStages.some((item) => item.id === requestedStage)) {
+      if (stageFromPath && learningStages.some((item) => item.id === stageFromPath)) {
+        setStageId(stageFromPath);
+      } else if (requestedStage && learningStages.some((item) => item.id === requestedStage)) {
         setStageId(requestedStage);
       } else if (storedStage && learningStages.some((item) => item.id === storedStage)) {
         setStageId(storedStage);
@@ -79,28 +91,36 @@ export function LearningWorkbench({
       if (params.get("agent") === "1") setAgentOpen(true);
     };
 
-    applyLocation();
-    setCompleted(readStoredArray(storageKeys.completed));
-    setPracticeChecks(readStoredChecks());
+    const frame = window.requestAnimationFrame(() => {
+      applyLocation();
+      setCompleted(readStoredArray(storageKeys.completed));
+      setPracticeChecks(readStoredChecks());
+    });
     window.addEventListener("popstate", applyLocation);
-    return () => window.removeEventListener("popstate", applyLocation);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.removeEventListener("popstate", applyLocation);
+    };
   }, []);
 
   useEffect(() => {
-    setAgentPrompt("先定位你现在最该解决的问题。");
-    setAgentReply("");
-    setAgentQuestion("");
-    setCopyLabel("复制本阶段任务提示词");
     window.localStorage.setItem(storageKeys.lastStage, stage.id);
+    const frame = window.requestAnimationFrame(() => {
+      setAgentPrompt("先定位你现在最该解决的问题。");
+      setAgentReply("");
+      setAgentQuestion("");
+      setCopyLabel("复制本阶段任务提示词");
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, [stage.id]);
 
   function changeLocation(nextStage: string, nextView: WorkbenchView) {
     setStageId(nextStage);
     setView(nextView);
     const params = new URLSearchParams();
-    params.set("stage", nextStage);
     params.set("view", nextView);
-    window.history.pushState({}, "", `${window.location.pathname}?${params.toString()}`);
+    if (agentOpen) params.set("agent", "1");
+    window.history.pushState({}, "", `/learn/${nextStage}?${params.toString()}`);
   }
 
   function setAgentVisibility(nextOpen: boolean) {
@@ -129,6 +149,7 @@ export function LearningWorkbench({
   }
 
   function askAgent(prompt: string) {
+    setAgentVisibility(true);
     setAgentPrompt(prompt);
     if (prompt.includes("解释") || prompt.includes("区别")) {
       setAgentReply(`${stage.question}\n\n${stage.theory[0].body}\n\n你需要能做到：${stage.mastery[0]}。`);
@@ -176,7 +197,7 @@ export function LearningWorkbench({
         </div>
         <div className="studio-progress" aria-label={`总体进度 ${progress}%`}>
           <span><i style={{width: `${progress}%`}} /></span>
-          <b>{progress}%</b>
+          <b>{completed.length === 0 ? `${stage.code} · 未开始` : `${progress}%`}</b>
         </div>
         <button
           className="studio-agent-toggle"
@@ -185,7 +206,7 @@ export function LearningWorkbench({
           aria-expanded={agentOpen}
           onClick={() => setAgentVisibility(!agentOpen)}
         >
-          {agentOpen ? "关闭辅导" : "打开辅导 Agent"}
+          {agentOpen ? "关闭辅导" : "打开阶段辅导"}
         </button>
       </header>
 
@@ -201,16 +222,15 @@ export function LearningWorkbench({
               <div><b>{layer.label}</b><span>{layer.range}</span></div>
               <p>{layer.title}</p>
               {learningStages.filter((item) => item.layer.startsWith(layer.label)).map((item) => (
-                <button
+                <Link
                   className={`${item.id === stage.id ? "is-active" : ""} ${completed.includes(item.id) ? "is-complete" : ""}`}
-                  type="button"
-                  onClick={() => changeLocation(item.id, view)}
+                  href={`/learn/${item.id}?view=${view}`}
                   key={item.id}
                 >
                   <b>{item.code}</b>
                   <span>{item.title}</span>
                   <i>{completed.includes(item.id) ? "✓" : ""}</i>
-                </button>
+                </Link>
               ))}
             </section>
           ))}
@@ -273,6 +293,58 @@ export function LearningWorkbench({
                   </article>
                 ))}
               </div>
+              {currentDetailedLessons.length > 0 && (
+                <section className="stage-lessons" aria-label={`${stage.code} 完整课程正文`}>
+                  <div className="stage-lessons-heading">
+                    <div>
+                      <span>完整课程正文</span>
+                      <h3>{currentDetailedLessons.length} 个可直接学习的小节</h3>
+                    </div>
+                    <p>不只看课程大纲。展开小节即可阅读讲解、照着操作、复制提示词并完成验收。</p>
+                  </div>
+                  <div className="stage-lesson-list">
+                    {currentDetailedLessons.map((lesson, index) => (
+                      <details
+                        id={`lesson-${lesson.code.replace(".", "-")}`}
+                        open={lesson.code === initialLessonCode || (!initialLessonCode && index === 0)}
+                        key={lesson.originalHref}
+                      >
+                        <summary>
+                          <b>{lesson.code}</b>
+                          <span>
+                            <strong>{lesson.title}</strong>
+                            <small>{lesson.time}</small>
+                          </span>
+                          <i>展开正文</i>
+                        </summary>
+                        <div className="lesson-contract-inline">
+                          <article><span>输入</span><p>{lesson.input}</p></article>
+                          <article><span>动手做</span><p>{lesson.practice}</p></article>
+                          <article><span>完成证据</span><p>{lesson.evidence}</p></article>
+                        </div>
+                        <article className="lesson-markdown stage-lesson-markdown">
+                          <ReactMarkdown
+                            remarkPlugins={[remarkGfm]}
+                            components={{
+                              pre: ({children}) => <CopyableCodeBlock>{children}</CopyableCodeBlock>,
+                            }}
+                          >
+                            {lesson.markdown}
+                          </ReactMarkdown>
+                        </article>
+                      </details>
+                    ))}
+                  </div>
+                </section>
+              )}
+              {stage.id === "s06" && currentDetailedLessons.length === 0 && (
+                <section className="stage-special-reading">
+                  <span>白盒核心正文</span>
+                  <h3>Agent 与 Harness：从模型回答到系统行动</h3>
+                  <p>进入一次完整 Run，分清模型、Agent、Harness、Runtime、Tool Call 与 Tool Execution，并完成最小验证实验。</p>
+                  <Link href="/learn/concepts/agent-harness">打开完整白盒正文 →</Link>
+                </section>
+              )}
               <div className="mastery-grid">
                 <article>
                   <span>学完必须掌握</span>
@@ -354,11 +426,11 @@ export function LearningWorkbench({
         <aside
           className="studio-agent"
           id="studio-agent-panel"
-          aria-label="个性化辅导 Agent"
+          aria-label="阶段辅导 Beta"
           aria-hidden={!agentOpen}
         >
           <div className="agent-head">
-            <div><span>个性化辅导 Agent</span><b>已读取 {stage.code} 上下文</b></div>
+            <div><span>阶段辅导 Beta</span><b>已读取 {stage.code} 课程规则</b></div>
             <button type="button" onClick={() => setAgentVisibility(false)} aria-label="关闭辅导 Agent">×</button>
           </div>
           <div className="agent-context">
@@ -386,7 +458,7 @@ export function LearningWorkbench({
             />
             <button type="button" onClick={submitAgentQuestion}>根据当前阶段给建议</button>
           </div>
-          <small className="agent-boundary">当前版本根据课程规则生成阶段化建议；不会读取你的代码，也不会替你宣布任务已经完成。</small>
+          <small className="agent-boundary">当前版本是基于课程规则的结构化自检，不是真模型对话；不会读取你的代码，也不会替你宣布任务已经完成。</small>
         </aside>
       </div>
     </main>

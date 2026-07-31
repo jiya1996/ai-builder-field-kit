@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import {readFile} from "node:fs/promises";
 import test from "node:test";
 
 async function render(pathname = "/") {
@@ -36,8 +37,9 @@ test("landing page communicates one promise and three coordinated deliveries", a
   assert.match(html, /一条主线。三种交付/);
   assert.match(html, /理论知识/);
   assert.match(html, /课程实战/);
-  assert.match(html, /辅导 Agent/);
+  assert.match(html, /阶段辅导 Beta/);
   assert.match(html, /查看 S00–S10 学习主线/);
+  assert.match(html, /\/learn\/s00\?view=theory/);
   assert.doesNotMatch(html, /45 个课程小节|五关路线|7 章理论知识/);
 });
 
@@ -55,9 +57,53 @@ test("learning workspace server-renders the unified S00-S10 experience", async (
   assert.match(html, /理解/);
   assert.match(html, /实战/);
   assert.match(html, /验收/);
-  assert.match(html, /个性化辅导 Agent/);
+  assert.match(html, /阶段辅导 Beta/);
   assert.match(html, /产品首页/);
   assert.match(html, /aria-expanded="false"/);
   assert.match(html, /aria-hidden="true"/);
   assert.match(html, /Git、GitHub 和部署不是一回事/);
+  assert.match(html, /完整课程正文/);
+  assert.match(html, /装上 AI 编程搭档/);
+  assert.match(html, /一键复制/);
+});
+
+test("each S stage has a shareable server-rendered route", async () => {
+  const response = await render("/learn/s04?view=theory");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /S04/);
+  assert.match(html, /真实全栈产品/);
+  assert.match(html, /数据库、字段与 CRUD/);
+  assert.match(html, /注册、登录与受保护页面/);
+  assert.match(html, /href="\/learn\/s05\?view=theory"/);
+  assert.match(html, /rel="canonical" href="https:\/\/jiya1996\.github\.io\/ai-builder-field-kit\/learn\/s04\/"/);
+});
+
+test("legacy lesson URLs render inside the S00-S10 workbench", async () => {
+  const response = await render("/learn/g0/0.2");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /唯一学习主线/);
+  assert.match(html, /S00/);
+  assert.match(html, /描述 → 生成 → 预览 → 调整/);
+  assert.match(html, /rel="canonical" href="https:\/\/jiya1996\.github\.io\/ai-builder-field-kit\/learn\/s00\/"/);
+  assert.doesNotMatch(html, /关卡 0<\/b>/);
+});
+
+test("legacy top-level routes use the same workbench", async () => {
+  for (const route of ["/knowledge", "/action", "/coach"]) {
+    const response = await render(route);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    assert.match(html, /唯一学习主线/);
+    assert.match(html, /S00/);
+  }
+});
+
+test("all course-to-agent actions open the stage guidance panel", async () => {
+  const source = await readFile(new URL("../app/learning-workbench.tsx", import.meta.url), "utf8");
+  const askAgentBody = source.match(/function askAgent\(prompt: string\) \{([\s\S]*?)\n  \}/)?.[1] ?? "";
+  assert.match(askAgentBody, /setAgentVisibility\(true\)/);
 });

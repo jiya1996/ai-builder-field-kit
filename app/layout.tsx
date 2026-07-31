@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "S00–S10 理论与实战双驱动学习工作台：看懂软件与 AI，完成真实产品，并获得阶段化辅导。",
   openGraph: {
     title: "学会软件如何运转、AI 如何协作、产品如何走到上线",
-    description: "S00–S10｜理论 × 实战｜个性化 Agent",
+    description: "S00–S10｜理论 × 实战｜阶段辅导 Beta",
     type: "website",
     url: publicOrigin,
     images: [{url: `${publicOrigin}/og.png`, width: 1200, height: 630, alt: "AI Builder Field Kit"}],

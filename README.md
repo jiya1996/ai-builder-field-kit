@@ -1,15 +1,16 @@
-# AI Builder Delivery System
+# AI Builder Field Kit
 
-面向零基础 AI Builder 的课程交付系统。它把产品承诺、五个成果关、45 个学习小节、Boss 战验收、常驻支持系统与可复制模板放在同一个可交互网站中。
+面向零基础 AI Builder 的双驱动学习工作台。全站只保留 S00–S10 一条学习主线：理论形成判断，实战产生结果，证据完成验收，阶段辅导 Beta 根据课程规则提供结构化自检。
 
 ## 在线访问
 
 [打开公开网站](https://jiya1996.github.io/ai-builder-field-kit/)
 
-- 首页：产品定位与完整交付总览
-- `/learn/`：课程目录、学习目标、动手任务与完成证据
-- `/learn/关卡/课节/`：每节完整正文，包括白话讲解、操作步骤、提示词、验收清单与常见坑
-- 课程正文已整理为站内结构化内容；内部定价、竞品映射与团队待办不进入公开仓库
+- `/`：产品价值、学习方式与三部分共同交付
+- `/learn/s00/` 到 `/learn/s10/`：可分享、可静态访问的阶段工作台
+- 每个阶段包含理解、实战、验收，以及映射后的完整课程正文
+- 旧 `/knowledge`、`/action`、`/coach` 与 `/learn/g*/课节/` 地址继续可用，但统一显示同一个 S00–S10 工作台
+- 当前阶段辅导为基于课程规则的 Beta，不读取用户代码，也不冒充真实模型对话
 
 ## 本地运行
 
@@ -20,7 +21,15 @@ npm install
 npm run dev
 ```
 
-本机的关卡手册更新后，运行 `npm run course:sync` 可重新生成公开课节正文；同步过程会自动去除内部来源说明。
+本机的通关手册更新后，运行 `npm run course:sync` 可重新生成公开课节正文；`app/stage-lesson-map.ts` 负责把旧课节映射到 S00–S10。
+
+## 内容与验收
+
+- S00–S10 的阶段合同位于 `app/stage-data.ts`
+- 完整课节正文来自 `app/course-markdown.ts`
+- 正文与新主线的映射位于 `app/stage-lesson-map.ts`
+- 页面与路由检查运行 `npm test`
+- 官方来源链接检查运行 `npm run check:links`
 
 ## 发布
 

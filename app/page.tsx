@@ -7,7 +7,7 @@ const deliveries = [
     title: "理论知识",
     copy: "只学当前阶段做决策必须懂的知识。知道它是什么、为什么存在，以及怎样在真实系统中观察。",
     outcomes: ["S00–S10 阶段化知识", "概念因果与理解检查", "官方一手资料"],
-    href: "/learn?stage=s00&view=theory",
+    href: "/learn/s00?view=theory",
     action: "进入理论视图",
   },
   {
@@ -16,17 +16,17 @@ const deliveries = [
     title: "课程实战",
     copy: "把知识立即放进项目里验证。每个阶段都有输入、工具、动作、输出和可复查的完成证据。",
     outcomes: ["真实项目任务", "工具选择与操作步骤", "Boss 战与交付证据"],
-    href: "/learn?stage=s00&view=practice",
+    href: "/learn/s00?view=practice",
     action: "进入实战视图",
   },
   {
     index: "03",
-    label: "为你适配",
-    title: "辅导 Agent",
-    copy: "它知道你正在学哪一阶段、要完成什么任务。根据你的目标和卡点，判断该补知识还是继续行动。",
-    outcomes: ["阶段定位", "知识缺口诊断", "下一步行动建议"],
-    href: "/learn?stage=s00&view=theory&agent=1",
-    action: "打开辅导 Agent",
+    label: "按阶段自检",
+    title: "阶段辅导 Beta",
+    copy: "它读取你所在阶段的课程规则，根据当前目标和证据，提供结构化自检与下一步建议。",
+    outcomes: ["阶段定位", "课程规则自检", "下一步行动建议"],
+    href: "/learn/s00?view=theory&agent=1",
+    action: "打开阶段辅导",
   },
 ];
 
@@ -42,7 +42,7 @@ export default function Home() {
           <a href="#delivery">我们交付什么</a>
           <a href="#method">学习方式</a>
         </nav>
-        <Link className="landing-nav-cta" href="/learn?stage=s00&view=theory">打开学习工作台</Link>
+        <Link className="landing-nav-cta" href="/learn/s00?view=theory">打开学习工作台</Link>
       </header>
 
       <section className="landing-hero">
@@ -63,7 +63,7 @@ export default function Home() {
           <h2>每一步，都对应一个可以验收的结果。</h2>
           <p>理论形成判断，实战产生证据，Agent 根据当前阶段提供辅导。</p>
           <div>
-            <Link href="/learn?stage=s00&view=theory">查看 S00–S10 学习主线</Link>
+            <Link href="/learn/s00?view=theory">查看 S00–S10 学习主线</Link>
             <a href="#delivery">了解三部分交付 →</a>
           </div>
         </div>
@@ -103,13 +103,13 @@ export default function Home() {
           <i>↺</i>
           <article><b>Agent</b><p>根据当前证据判断补知识、修任务还是继续前进。</p></article>
         </div>
-        <Link className="method-cta" href="/learn?stage=s00&view=theory">从 S00 第一次成功开始</Link>
+        <Link className="method-cta" href="/learn/s00?view=theory">从 S00 第一次成功开始</Link>
       </section>
 
       <footer className="landing-footer">
         <div className="landing-brand"><span>AI</span><b>Builder Field Kit</b></div>
-        <p>S00–S10 ｜ 理论 × 实战 ｜ 个性化 Agent</p>
-        <Link href="/learn?stage=s00&view=theory">进入学习工作台 ↑</Link>
+        <p>S00–S10 ｜ 理论 × 实战 ｜ 阶段辅导 Beta</p>
+        <Link href="/learn/s00?view=theory">进入学习工作台 ↑</Link>
       </footer>
     </main>
   );

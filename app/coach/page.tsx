@@ -1,11 +1,12 @@
 import type {Metadata} from "next";
 import {LearningWorkbench} from "../learning-workbench";
+import {getAllDetailedLessons} from "../stage-lesson-map";
 
 export const metadata: Metadata = {
-  title: "辅导 Agent｜AI Builder 学习工作台",
-  description: "与 S00–S10 当前阶段共享上下文的个性化辅导 Agent。",
+  title: "阶段辅导 Beta｜AI Builder 学习工作台",
+  description: "根据 S00–S10 当前阶段课程规则提供结构化自检与下一步建议。",
 };
 
 export default function CoachPage() {
-  return <LearningWorkbench initialView="theory" />;
+  return <LearningWorkbench initialView="theory" detailedLessons={getAllDetailedLessons()} />;
 }
