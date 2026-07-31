@@ -28,8 +28,11 @@ test("landing page communicates one promise and three coordinated deliveries", a
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
 
   const html = await response.text();
-  assert.match(html, /别人教你让 AI 写代码/);
-  assert.match(html, /我们陪你把它真的做完/);
+  assert.match(html, /学会软件如何运转/);
+  assert.match(html, /AI 如何协作/);
+  assert.match(html, /产品如何从想法走到上线/);
+  assert.match(html, /你会掌握下一次独立完成产品的方法/);
+  assert.doesNotMatch(html, /别人教你让 AI 写代码|我们陪你把它真的做完/);
   assert.match(html, /一条主线。三种交付/);
   assert.match(html, /理论知识/);
   assert.match(html, /课程实战/);

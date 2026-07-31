@@ -48,14 +48,20 @@ export default function Home() {
       <section className="landing-hero">
         <div className="landing-hero-main">
           <span className="landing-kicker">给零基础 AI Builder 的产品训练</span>
-          <h1>
-            别人教你让 AI 写代码。
-            <em>我们陪你把它真的做完。</em>
+          <h1 className="landing-promise-list">
+            <span>学会软件如何运转</span>
+            <span>AI 如何协作</span>
+            <span>产品如何从想法走到上线</span>
           </h1>
+          <p className="landing-promise-outcome">
+            最终，你不只拥有一个作品。
+            <strong>你会掌握下一次独立完成产品的方法。</strong>
+          </p>
         </div>
         <div className="landing-hero-side">
-          <p>学会软件如何运转，AI 如何协作，产品如何从想法走到上线。</p>
-          <strong>最终，你不只拥有一个作品。你会掌握下一次独立完成产品的方法。</strong>
+          <span className="landing-stage-label">S00–S10 学习工作台</span>
+          <h2>每一步，都对应一个可以验收的结果。</h2>
+          <p>理论形成判断，实战产生证据，Agent 根据当前阶段提供辅导。</p>
           <div>
             <Link href="/learn?stage=s00&view=theory">查看 S00–S10 学习主线</Link>
             <a href="#delivery">了解三部分交付 →</a>
