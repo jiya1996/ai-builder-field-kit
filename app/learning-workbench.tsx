@@ -103,6 +103,15 @@ export function LearningWorkbench({
     window.history.pushState({}, "", `${window.location.pathname}?${params.toString()}`);
   }
 
+  function setAgentVisibility(nextOpen: boolean) {
+    setAgentOpen(nextOpen);
+    const params = new URLSearchParams(window.location.search);
+    if (nextOpen) params.set("agent", "1");
+    else params.delete("agent");
+    const query = params.toString();
+    window.history.replaceState({}, "", `${window.location.pathname}${query ? `?${query}` : ""}`);
+  }
+
   function togglePracticeStep(index: number) {
     const current = practiceChecks[stage.id] ?? [];
     const next = current.includes(index) ? current.filter((item) => item !== index) : [...current, index];
@@ -154,10 +163,13 @@ export function LearningWorkbench({
   return (
     <main className="studio-shell">
       <header className="studio-header">
-        <Link className="studio-brand" href="/" aria-label="返回首页">
-          <span>AI</span>
-          <b>Builder Field Kit</b>
-        </Link>
+        <div className="studio-brand-area">
+          <Link className="studio-brand" href="/" aria-label="返回产品首页">
+            <span>AI</span>
+            <b>Builder Field Kit</b>
+          </Link>
+          <Link className="studio-home-link" href="/">产品首页</Link>
+        </div>
         <div className="studio-current">
           <small>当前阶段</small>
           <strong>{stage.code} · {stage.title}</strong>
@@ -166,7 +178,13 @@ export function LearningWorkbench({
           <span><i style={{width: `${progress}%`}} /></span>
           <b>{progress}%</b>
         </div>
-        <button className="studio-agent-toggle" type="button" onClick={() => setAgentOpen((value) => !value)}>
+        <button
+          className="studio-agent-toggle"
+          type="button"
+          aria-controls="studio-agent-panel"
+          aria-expanded={agentOpen}
+          onClick={() => setAgentVisibility(!agentOpen)}
+        >
           {agentOpen ? "关闭辅导" : "打开辅导 Agent"}
         </button>
       </header>
@@ -333,10 +351,15 @@ export function LearningWorkbench({
           )}
         </section>
 
-        <aside className="studio-agent" aria-label="个性化辅导 Agent">
+        <aside
+          className="studio-agent"
+          id="studio-agent-panel"
+          aria-label="个性化辅导 Agent"
+          aria-hidden={!agentOpen}
+        >
           <div className="agent-head">
             <div><span>个性化辅导 Agent</span><b>已读取 {stage.code} 上下文</b></div>
-            <button type="button" onClick={() => setAgentOpen(false)} aria-label="关闭辅导 Agent">×</button>
+            <button type="button" onClick={() => setAgentVisibility(false)} aria-label="关闭辅导 Agent">×</button>
           </div>
           <div className="agent-context">
             <span>当前辅导目标</span>

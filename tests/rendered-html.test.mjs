@@ -53,5 +53,8 @@ test("learning workspace server-renders the unified S00-S10 experience", async (
   assert.match(html, /实战/);
   assert.match(html, /验收/);
   assert.match(html, /个性化辅导 Agent/);
+  assert.match(html, /产品首页/);
+  assert.match(html, /aria-expanded="false"/);
+  assert.match(html, /aria-hidden="true"/);
   assert.match(html, /Git、GitHub 和部署不是一回事/);
 });

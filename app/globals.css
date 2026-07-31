@@ -513,6 +513,16 @@ footer{padding:28px max(24px,calc((100vw - 1180px)/2));display:flex;align-items:
   box-shadow:3px 3px 0 var(--studio-line);
 }
 .studio-brand>b{font-size:16px;font-weight:900}
+.studio-brand-area{display:flex;align-items:center;gap:12px}
+.studio-home-link{
+  padding-left:12px;
+  border-left:1px solid #c8c1b5;
+  color:#5d687e;
+  font-size:10px;
+  font-weight:900;
+  white-space:nowrap;
+}
+.studio-home-link:hover{color:var(--studio-coral)}
 .studio-current small{color:#72809b;font-weight:800;letter-spacing:.08em}
 .studio-current strong{font-size:14px;font-weight:900}
 .studio-progress>span{height:8px;border:2px solid var(--studio-line);background:#fff}
@@ -526,7 +536,7 @@ footer{padding:28px max(24px,calc((100vw - 1180px)/2));display:flex;align-items:
 }
 .studio-grid{
   height:calc(100vh - 78px);
-  grid-template-columns:275px minmax(620px,1fr) 370px;
+  grid-template-columns:275px minmax(620px,1fr);
 }
 .studio-rail{
   padding:28px 18px 38px;
@@ -786,11 +796,30 @@ footer{padding:28px max(24px,calc((100vw - 1180px)/2));display:flex;align-items:
 .complete-stage.is-complete{border-color:var(--studio-line);background:var(--studio-mint);color:var(--studio-navy)}
 
 .studio-agent{
+  position:fixed;
+  z-index:30;
+  top:78px;
+  right:0;
+  bottom:0;
+  width:370px;
   padding:26px 21px 36px;
   border-left:2px solid var(--studio-line);
   background:var(--studio-navy);
   color:#fff;
+  box-shadow:-12px 0 40px rgba(20,33,61,.28);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transform:translateX(100%);
+  transition:transform .22s ease,opacity .18s ease,visibility .22s;
 }
+.studio-grid.agent-is-open .studio-agent{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  transform:translateX(0);
+}
+.agent-head button{display:block}
 .agent-head{border-bottom-color:#53617b}
 .agent-head span{color:var(--studio-yellow)}.agent-head b{color:#fff}
 .agent-head button{color:#fff}
@@ -819,7 +848,7 @@ footer{padding:28px max(24px,calc((100vw - 1180px)/2));display:flex;align-items:
 @media(max-width:1180px){
   .studio-header{grid-template-columns:250px 1fr auto}
   .studio-grid{grid-template-columns:250px minmax(540px,1fr)}
-  .studio-agent{top:78px}
+  .studio-agent{top:78px;width:350px}
 }
 @media(max-width:860px){
   .studio-grid{grid-template-columns:205px minmax(0,1fr)}
@@ -829,6 +858,7 @@ footer{padding:28px max(24px,calc((100vw - 1180px)/2));display:flex;align-items:
 }
 @media(max-width:640px){
   .studio-header{height:66px}
+  .studio-home-link{display:none}
   .studio-grid{display:block}
   .studio-rail{
     top:66px;
