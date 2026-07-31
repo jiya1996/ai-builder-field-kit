@@ -112,3 +112,15 @@ test("all course-to-agent actions open the stage guidance panel", async () => {
   const askAgentBody = source.match(/function askAgent\(prompt: string\) \{([\s\S]*?)\n  \}/)?.[1] ?? "";
   assert.match(askAgentBody, /setAgentVisibility\(true\)/);
 });
+
+test("acceptance items are interactive and gate stage completion", async () => {
+  const source = await readFile(new URL("../app/learning-workbench.tsx", import.meta.url), "utf8");
+  assert.match(source, /evidenceChecks: "ai-builder-evidence-checks"/);
+  assert.match(source, /bossChecks: "ai-builder-boss-checks"/);
+  assert.match(source, /function toggleEvidence\(index: number\)/);
+  assert.match(source, /function toggleBossCheck\(\)/);
+  assert.match(source, /role="checkbox"/);
+  assert.match(source, /aria-checked=\{isChecked\}/);
+  assert.match(source, /disabled=\{!completed\.includes\(stage\.id\) && !allAcceptanceChecked\}/);
+  assert.match(source, /完成全部验收项后解锁通关/);
+});

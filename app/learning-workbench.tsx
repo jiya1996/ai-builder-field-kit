@@ -19,7 +19,9 @@ const viewLabels: Record<WorkbenchView, string> = {
 
 const storageKeys = {
   completed: "ai-builder-completed-stages",
-  checks: "ai-builder-practice-checks",
+  practiceChecks: "ai-builder-practice-checks",
+  evidenceChecks: "ai-builder-evidence-checks",
+  bossChecks: "ai-builder-boss-checks",
   lastStage: "ai-builder-last-stage",
 };
 
@@ -32,9 +34,9 @@ function readStoredArray(key: string) {
   }
 }
 
-function readStoredChecks() {
+function readStoredChecks(key: string) {
   try {
-    const value = JSON.parse(window.localStorage.getItem(storageKeys.checks) ?? "{}");
+    const value = JSON.parse(window.localStorage.getItem(key) ?? "{}");
     return value && typeof value === "object" ? value as Record<string, number[]> : {};
   } catch {
     return {};
@@ -56,6 +58,8 @@ export function LearningWorkbench({
   const [view, setView] = useState<WorkbenchView>(initialView);
   const [completed, setCompleted] = useState<string[]>([]);
   const [practiceChecks, setPracticeChecks] = useState<Record<string, number[]>>({});
+  const [evidenceChecks, setEvidenceChecks] = useState<Record<string, number[]>>({});
+  const [bossChecks, setBossChecks] = useState<string[]>([]);
   const [agentOpen, setAgentOpen] = useState(false);
   const [agentQuestion, setAgentQuestion] = useState("");
   const [agentPrompt, setAgentPrompt] = useState("先定位你现在最该解决的问题。");
@@ -70,6 +74,9 @@ export function LearningWorkbench({
   const stageIndex = learningStages.findIndex((item) => item.id === stage.id);
   const currentDetailedLessons = detailedLessons.filter((lesson) => lesson.stageId === stage.id);
   const checkedSteps = practiceChecks[stage.id] ?? [];
+  const checkedEvidence = evidenceChecks[stage.id] ?? [];
+  const bossChecked = bossChecks.includes(stage.id);
+  const allAcceptanceChecked = checkedEvidence.length === stage.evidence.length && bossChecked;
   const progress = Math.round((completed.length / learningStages.length) * 100);
 
   useEffect(() => {
@@ -94,7 +101,9 @@ export function LearningWorkbench({
     const frame = window.requestAnimationFrame(() => {
       applyLocation();
       setCompleted(readStoredArray(storageKeys.completed));
-      setPracticeChecks(readStoredChecks());
+      setPracticeChecks(readStoredChecks(storageKeys.practiceChecks));
+      setEvidenceChecks(readStoredChecks(storageKeys.evidenceChecks));
+      setBossChecks(readStoredArray(storageKeys.bossChecks));
     });
     window.addEventListener("popstate", applyLocation);
     return () => {
@@ -137,10 +146,38 @@ export function LearningWorkbench({
     const next = current.includes(index) ? current.filter((item) => item !== index) : [...current, index];
     const updated = {...practiceChecks, [stage.id]: next};
     setPracticeChecks(updated);
-    window.localStorage.setItem(storageKeys.checks, JSON.stringify(updated));
+    window.localStorage.setItem(storageKeys.practiceChecks, JSON.stringify(updated));
+  }
+
+  function removeStageCompletion() {
+    if (!completed.includes(stage.id)) return;
+    const updated = completed.filter((item) => item !== stage.id);
+    setCompleted(updated);
+    window.localStorage.setItem(storageKeys.completed, JSON.stringify(updated));
+  }
+
+  function toggleEvidence(index: number) {
+    const current = evidenceChecks[stage.id] ?? [];
+    const willUncheck = current.includes(index);
+    const next = willUncheck ? current.filter((item) => item !== index) : [...current, index];
+    const updated = {...evidenceChecks, [stage.id]: next};
+    setEvidenceChecks(updated);
+    window.localStorage.setItem(storageKeys.evidenceChecks, JSON.stringify(updated));
+    if (willUncheck) removeStageCompletion();
+  }
+
+  function toggleBossCheck() {
+    const willUncheck = bossChecks.includes(stage.id);
+    const updated = willUncheck
+      ? bossChecks.filter((item) => item !== stage.id)
+      : [...bossChecks, stage.id];
+    setBossChecks(updated);
+    window.localStorage.setItem(storageKeys.bossChecks, JSON.stringify(updated));
+    if (willUncheck) removeStageCompletion();
   }
 
   function toggleCompleted() {
+    if (!completed.includes(stage.id) && !allAcceptanceChecked) return;
     const updated = completed.includes(stage.id)
       ? completed.filter((item) => item !== stage.id)
       : [...completed, stage.id];
@@ -434,20 +471,59 @@ export function LearningWorkbench({
                 <div><span>EVIDENCE</span><h2>不是“做过了”，而是证据已经产生。</h2></div>
                 <p>理论检查与实战证据同时通过，阶段才算完成。</p>
               </div>
+              <div className="acceptance-progress" aria-live="polite">
+                <span>验收进度</span>
+                <strong>{checkedEvidence.length + (bossChecked ? 1 : 0)} / {stage.evidence.length + 1}</strong>
+                <p>{allAcceptanceChecked ? "全部验收项已确认，可以通关。" : "逐项确认真实证据，最后完成 Boss 验收。"}</p>
+              </div>
               <div className="evidence-list">
-                {stage.evidence.map((item, index) => (
-                  <article key={item}><b>{String(index + 1).padStart(2, "0")}</b><span>{item}</span></article>
-                ))}
+                {stage.evidence.map((item, index) => {
+                  const isChecked = checkedEvidence.includes(index);
+                  return (
+                    <button
+                      className={isChecked ? "is-checked" : ""}
+                      type="button"
+                      role="checkbox"
+                      aria-checked={isChecked}
+                      onClick={() => toggleEvidence(index)}
+                      key={item}
+                    >
+                      <b>{isChecked ? "✓" : String(index + 1).padStart(2, "0")}</b>
+                      <span>{item}</span>
+                      <small>{isChecked ? "已确认" : "点击勾选"}</small>
+                    </button>
+                  );
+                })}
               </div>
               <div className="boss-card">
                 <span>BOSS 验收</span>
                 <h3>{stage.boss}</h3>
-                <button type="button" onClick={() => askAgent("检查我的证据是否完整")}>让 Agent 检查证据 →</button>
+                <div className="boss-actions">
+                  <button
+                    className={`boss-check ${bossChecked ? "is-checked" : ""}`}
+                    type="button"
+                    role="checkbox"
+                    aria-checked={bossChecked}
+                    onClick={toggleBossCheck}
+                  >
+                    {bossChecked ? "✓ Boss 验收已完成" : "○ 确认完成 Boss 验收"}
+                  </button>
+                  <button type="button" onClick={() => askAgent("检查我的证据是否完整")}>让 Agent 检查证据 →</button>
+                </div>
               </div>
-              <button className={`complete-stage ${completed.includes(stage.id) ? "is-complete" : ""}`} type="button" onClick={toggleCompleted}>
-                {completed.includes(stage.id) ? `${stage.code} 已标记完成 ✓` : `标记 ${stage.code} 已完成`}
+              <button
+                className={`complete-stage ${completed.includes(stage.id) ? "is-complete" : ""}`}
+                type="button"
+                disabled={!completed.includes(stage.id) && !allAcceptanceChecked}
+                onClick={toggleCompleted}
+              >
+                {completed.includes(stage.id)
+                  ? `${stage.code} 已通关 ✓`
+                  : allAcceptanceChecked
+                    ? `全部通过，完成 ${stage.code}`
+                    : `完成全部验收项后解锁通关`}
               </button>
-              {stageIndex < learningStages.length - 1 && (
+              {completed.includes(stage.id) && stageIndex < learningStages.length - 1 && (
                 <button className="view-next" type="button" onClick={() => changeLocation(learningStages[stageIndex + 1].id, "theory")}>
                   进入 {learningStages[stageIndex + 1].code} 理论 →
                 </button>
