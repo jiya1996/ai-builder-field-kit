@@ -85,6 +85,19 @@ test("each S stage has a shareable server-rendered route", async () => {
   assert.match(html, /rel="canonical" href="https:\/\/jiya1996\.github\.io\/ai-builder-field-kit\/learn\/s04\/"/);
 });
 
+test("markdown tables fill the lesson width inside a responsive scroll container", async () => {
+  const response = await render("/learn/s01");
+  assert.equal(response.status, 200);
+
+  const html = await response.text();
+  assert.match(html, /class="markdown-table-scroll"/);
+  assert.match(html, /三选一题库/);
+
+  const css = await readFile(new URL("../app/globals.css", import.meta.url), "utf8");
+  assert.match(css, /\.lesson-markdown table\{display:table;width:100%;min-width:720px/);
+  assert.doesNotMatch(css, /\.lesson-markdown table\{display:block/);
+});
+
 test("legacy lesson URLs render inside the S00-S10 workbench", async () => {
   const response = await render("/learn/g0/0.2");
   assert.equal(response.status, 200);

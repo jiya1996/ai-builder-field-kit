@@ -406,6 +406,11 @@ export function LearningWorkbench({
                             remarkPlugins={[remarkGfm]}
                             components={{
                               pre: ({children}) => <CopyableCodeBlock>{children}</CopyableCodeBlock>,
+                              table: ({children}) => (
+                                <div className="markdown-table-scroll">
+                                  <table>{children}</table>
+                                </div>
+                              ),
                             }}
                           >
                             {lesson.markdown}
