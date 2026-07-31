@@ -248,6 +248,10 @@ export function LearningWorkbench({
               <span>{stage.code}</span>
               <h1>{stage.title}</h1>
               <p>{stage.question}</p>
+              <article className="stage-project-brief">
+                <small>本阶段要做的东西</small>
+                <strong>{stage.project}</strong>
+              </article>
             </div>
             <dl>
               <div><dt>理论学习</dt><dd>{stage.theoryTime}</dd></div>
@@ -282,6 +286,35 @@ export function LearningWorkbench({
                 <div><span>KNOWLEDGE</span><h2>不是记名词，而是理解系统因果。</h2></div>
                 <p>本阶段只学习马上会在项目中使用和验证的知识。</p>
               </div>
+              {stage.projectGuide && (
+                <section className="stage-project-guide" aria-label={`${stage.code} 项目说明`}>
+                  <div className="project-guide-head">
+                    <div>
+                      <span>本阶段具体作品</span>
+                      <h3>{stage.project}</h3>
+                    </div>
+                    <p>{stage.projectGuide.purpose}</p>
+                  </div>
+                  <div className="project-guide-grid">
+                    <article>
+                      <span>网页必须包含</span>
+                      <ul>{stage.projectGuide.sections.map((item) => <li key={item}>{item}</li>)}</ul>
+                    </article>
+                    <article>
+                      <span>用 AI 完成的路径</span>
+                      <ol>{stage.projectGuide.path.map((item) => <li key={item}>{item}</li>)}</ol>
+                    </article>
+                  </div>
+                  <div className="project-guide-boundary">
+                    <span>基础版边界</span>
+                    <p>{stage.projectGuide.boundary}</p>
+                  </div>
+                  <div className="project-guide-prompt">
+                    <span>从这段需求澄清提示词开始</span>
+                    <CopyableCodeBlock><code>{stage.projectGuide.starterPrompt}</code></CopyableCodeBlock>
+                  </div>
+                </section>
+              )}
               <div className="concept-list">
                 {stage.concepts.map((concept) => <span key={concept}>{concept}</span>)}
               </div>

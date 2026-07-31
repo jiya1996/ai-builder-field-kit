@@ -62,6 +62,11 @@ test("learning workspace server-renders the unified S00-S10 experience", async (
   assert.match(html, /aria-expanded="false"/);
   assert.match(html, /aria-hidden="true"/);
   assert.match(html, /Git、GitHub 和部署不是一回事/);
+  assert.match(html, /本阶段要做的东西/);
+  assert.match(html, /用 AI 做一个属于自己的个人介绍网页/);
+  assert.match(html, /用 AI 协作完成，但成品本身不是 AI 产品/);
+  assert.match(html, /从这段需求澄清提示词开始/);
+  assert.match(html, /请先不要写代码，也不要替我编造经历/);
   assert.match(html, /完整课程正文/);
   assert.match(html, /装上 AI 编程搭档/);
   assert.match(html, /一键复制/);
