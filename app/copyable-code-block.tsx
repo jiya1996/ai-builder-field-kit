@@ -1,6 +1,7 @@
 "use client";
 
 import {useRef, useState, type ReactNode} from "react";
+import {copyText} from "./copy-text";
 
 type CopyableCodeBlockProps = {
   children?: ReactNode;
@@ -14,8 +15,7 @@ export function CopyableCodeBlock({children}: CopyableCodeBlockProps) {
     const text = preRef.current?.innerText ?? "";
     if (!text) return;
 
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
+    setCopied(await copyText(text));
     window.setTimeout(() => setCopied(false), 1600);
   };
 

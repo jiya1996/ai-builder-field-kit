@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import {useEffect, useMemo, useState} from "react";
+import {copyText} from "./copy-text";
 import {learningLayers, learningStages} from "./stage-data";
 
 type WorkbenchView = "theory" | "practice" | "evidence";
@@ -145,8 +146,8 @@ export function LearningWorkbench({
       `不要替我宣布完成。完成后请给出需要检查的文件、运行结果和证据。`,
       `本阶段验收：${stage.boss}`,
     ].join("\n");
-    await navigator.clipboard.writeText(prompt);
-    setCopyLabel("已复制");
+    const copied = await copyText(prompt);
+    setCopyLabel(copied ? "已复制 ✓" : "复制失败，请手动复制");
     window.setTimeout(() => setCopyLabel("复制本阶段任务提示词"), 1600);
   }
 

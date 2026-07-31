@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import {copyText} from "./copy-text";
 import { courseGates } from "./course-data";
 import { projectFamilies } from "./data";
 
@@ -220,8 +221,7 @@ export function TemplateWorkbench() {
   const selected = templates.find((template) => template.id === active) ?? templates[0];
 
   const copyTemplate = async () => {
-    await navigator.clipboard.writeText(`${selected.title}\n\n${selected.content.join("\n")}`);
-    setCopied(true);
+    setCopied(await copyText(`${selected.title}\n\n${selected.content.join("\n")}`));
     window.setTimeout(() => setCopied(false), 1600);
   };
 

@@ -834,7 +834,9 @@ footer{padding:28px max(24px,calc((100vw - 1180px)/2));display:flex;align-items:
     top:66px;
     border-bottom:2px solid var(--studio-line);
     background:var(--studio-navy);
+    scrollbar-width:none;
   }
+  .studio-rail::-webkit-scrollbar{display:none}
   .rail-layer>button{border:1px solid #53617b;color:#fff}
   .rail-layer>button.is-active{border-color:var(--studio-line);color:var(--studio-navy)}
   .stage-hero{padding:30px 24px}.stage-hero h1{font-size:48px}

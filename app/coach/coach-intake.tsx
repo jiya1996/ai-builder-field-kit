@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import {useMemo, useState} from "react";
+import {copyText} from "../copy-text";
 
 type Choice = {value: string; label: string; hint: string};
 
@@ -81,8 +82,7 @@ export function CoachIntake() {
 推进节奏：${result.cadence}`;
 
   async function copyResult() {
-    await navigator.clipboard.writeText(summary);
-    setCopied(true);
+    setCopied(await copyText(summary));
     window.setTimeout(() => setCopied(false), 1600);
   }
 
